@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bash Terminal Tutor 🖥️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #00ff88;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 1.1em;
+        }
+        .lesson-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .lesson-btn {
+            padding: 12px 20px;
+            background: #2d2d44;
+            border: 2px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        .lesson-btn:hover, .lesson-btn.active {
+            background: #00ff88;
+            color: #1a1a2e;
+            border-color: #00ff88;
+        }
+        .lesson-content {
+            background: #1e1e2e;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .lesson-content h2 {
+            color: #00ff88;
+            margin-bottom: 20px;
+        }
+        .lesson-content h3 {
+            color: #ff79c6;
+            margin: 25px 0 15px;
+        }
+        pre {
+            background: #0d0d14;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #333;
+        }
+        code {
+            color: #f1fa8c;
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+        .prompt {
+            color: #00ff88 !important;
+        }
+        .exercise {
+            background: #2d2d44;
+            border-left: 4px solid #ff79c6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .exercise h4 {
+            color: #ff79c6;
+            margin-bottom: 10px;
+        }
+        .terminal {
+            background: #0d0d14;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid #333;
+        }
+        .terminal-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .terminal-input input {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a2e;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        .terminal-input input:focus {
+            outline: none;
+            border-color: #00ff88;
+        }
+        .terminal-input button {
+            padding: 12px 24px;
+            background: #00ff88;
+            border: none;
+            border-radius: 6px;
+            color: #1a1a2e;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .terminal-input button:hover {
+            background: #00cc6a;
+        }
+        .output {
+            background: #0d0d14;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            min-height: 60px;
+            font-family: 'Fira Code', monospace;
+            white-space: pre-wrap;
+            color: #bd93f9;
+        }
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .progress-table th, .progress-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .progress-table th {
+            color: #00ff88;
+        }
+        .checkbox {
+            color: #00ff88;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+        footer a {
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🖥️ Bash Terminal Tutor</h1>
+            <p class="subtitle">Learn bash commands interactively!</p>
+        </header>
+
+        <div class="lesson-nav">
+            <button class="lesson-btn active" onclick="showLesson(0)">1. Navigation</button>
+            <button class="lesson-btn" onclick="showLesson(1)">2. File Ops</button>
+            <button class="lesson-btn" onclick="showLesson(2)">3. Copy & Move</button>
+            <button class="lesson-btn" onclick="showLesson(3)">4. Reading Files</button>
+            <button class="lesson-btn" onclick="showLesson(4)">5. Search</button>
+            <button class="lesson-btn" onclick="showLesson(5)">6. Permissions</button>
+            <button class="lesson-btn" onclick="showLesson(6)">7. Pipes</button>
+        </div>
+
+        <div class="lesson-content" id="lessonContent">
+            <!-- Content loads here -->
+        </div>
+
+        <div class="terminal">
+            <h3>💻 Try It Yourself!</h3>
+            <div class="terminal-input">
+                <input type="text" id="commandInput" placeholder="Enter a bash command (e.g., ls, pwd, echo hello)" onkeypress="if(event.key==='Enter')runCommand()">
+                <button onclick="runCommand()">Run</button>
+            </div>
+            <div class="output" id="output">Output will appear here...</div>
+        </div>
+
+        <div class="lesson-content">
+            <h2>📊 Your Progress</h2>
+            <table class="progress-table">
+                <tr><th>Lesson</th><th>Status</th></tr>
+                <tr><td>1. Navigation (ls, cd, pwd)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>2. File Operations (mkdir, touch, rm)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>3. Copy & Move (cp, mv)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>4. Reading Files (cat, head, tail)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>5. Search (grep, find)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>6. Permissions (chmod, chown)</td><td class="checkbox">⬜</td></tr>
+                <tr><td>7. Pipes & Redirection (|, >, >>)</td><td class="checkbox">⬜</td></tr>
+            </table>
+        </div>
+
+        <footer>
+            <p>Built with ❤️ using Marimo | <a href="https://github.com/lntegrals/bash-terminal-tutor">View on GitHub</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const lessons = [
+            {
+                title: "📂 Navigation Commands",
+                content: `
+<h3>pwd - Print Working Directory</h3>
+<pre><span class="prompt">$</span> pwd
+/home/user</pre>
+<p>Shows you where you are in the filesystem.</p>
+
+<h3>ls - List Directory Contents</h3>
+<pre><span class="prompt">$</span> ls
+Documents  Downloads  Pictures  Music
+
+<span class="prompt">$</span> ls -la   # List all files with details
+total 32
+drwxr-xr-x  5 user  staff   160 Jan  1 12:00 .
+drwxr-xr-x  1 root  root   4096 Jan  1 12:00 ..</pre>
+
+<h3>cd - Change Directory</h3>
+<pre><span class="prompt">$</span> cd Documents    # Go into Documents
+<span class="prompt">$</span> cd ..          # Go up one level
+<span class="prompt">$</span> cd ~           # Go to home directory
+<span class="prompt">$</span> cd -           # Go back to previous directory</pre>
+                `,
+                exercise: "Try: cd Documents"
+            },
+            {
+                title: "📄 File Operations",
+                content: `
+<h3>mkdir - Make Directory</h3>
+<pre><span class="prompt">$</span> mkdir myfolder        # Create a directory
+<span class="prompt">$</span> mkdir -p a/b/c        # Create nested directories</pre>
+
+<h3>touch - Create Empty File</h3>
+<pre><span class="prompt">$</span> touch myfile.txt     # Create an empty file
+<span class="prompt">$</span> touch file1 file2    # Create multiple files</pre>
+
+<h3>rm - Remove Files/Directories</h3>
+<pre><span class="prompt">$</span> rm myfile.txt        # Remove a file
+<span class="prompt">$</span> rm -r myfolder      # Remove a directory and its contents
+<span class="prompt">$</span> rm -f myfile        # Force remove (no prompt)</pre>
+                `,
+                exercise: "Try: mkdir practice && touch practice/hello.txt"
+            },
+            {
+                title: "📋 Copy & Move",
+                content: `
+<h3>cp - Copy Files</h3>
+<pre><span class="prompt">$</span> cp file1.txt file2.txt       # Copy file
+<span class="prompt">$</span> cp -r folder1 folder2         # Copy folder
+<span class="prompt">$</span> cp *.txt backup/              # Copy all .txt files</pre>
+
+<h3>mv - Move/Rename Files</h3>
+<pre><span class="prompt">$</span> mv oldname.txt newname.txt   # Rename file
+<span class="prompt">$</span> mv file.txt folder/          # Move file to folder</pre>
+                `,
+                exercise: "Try: cp important.txt backup.txt"
+            },
+            {
+                title: "📖 Reading Files",
+                content: `
+<h3>cat - Concatenate & Display</h3>
+<pre><span class="prompt">$</span> cat myfile.txt                # Display entire file
+<span class="prompt">$</span> cat file1.txt file2.txt       # Display multiple files</pre>
+
+<h3>head - First Lines</h3>
+<pre><span class="prompt">$</span> head myfile.txt              # First 10 lines
+<span class="prompt">$</span> head -n 5 myfile.txt         # First 5 lines</pre>
+
+<h3>tail - Last Lines</h3>
+<pre><span class="prompt">$</span> tail myfile.txt              # Last 10 lines
+<span class="prompt">$</span> tail -n 5 myfile.txt         # Last 5 lines
+<span class="prompt">$</span> tail -f log.txt              # Follow (watch) a growing file</pre>
+                `,
+                exercise: "Try: head -n 5 /etc/passwd"
+            },
+            {
+                title: "🔍 Search Commands",
+                content: `
+<h3>grep - Search Within Files</h3>
+<pre><span class="prompt">$</span> grep "hello" myfile.txt              # Find lines with "hello"
+<span class="prompt">$</span> grep -i "hello" myfile.txt           # Case-insensitive search
+<span class="prompt">$</span> grep -r "hello" ./                   # Recursive search
+<span class="prompt">$</span> grep -n "hello" myfile.txt           # Show line numbers</pre>
+
+<h3>find - Search for Files</h3>
+<pre><span class="prompt">$</span> find . -name "*.txt"                 # Find all .txt files
+<span class="prompt">$</span> find . -type d                       # Find all directories
+<span class="prompt">$</span> find . -mtime -7                       # Files modified in last 7 days</pre>
+                `,
+                exercise: "Try: grep -i 'error' logfile.txt"
+            },
+            {
+                title: "🔐 Permissions",
+                content: `
+<h3>chmod - Change Mode (Permissions)</h3>
+<pre><span class="prompt">$</span> chmod 755 script.sh         # rwxr-xr-x
+<span class="prompt">$</span> chmod +x script.sh          # Make executable
+<span class="prompt">$</span> chmod -w file.txt           # Remove write permission
+
+# Permission codes:
+# r = 4 (read), w = 2 (write), x = 1 (execute)
+# Owner | Group | Others</pre>
+
+<h3>chown - Change Owner</h3>
+<pre><span class="prompt">$</span> chown user:group file.txt
+<span class="prompt">$</span> chown -R user:group folder/</pre>
+                `,
+                exercise: "Try: chmod +x myscript.sh"
+            },
+            {
+                title: "🔗 Pipes & Redirection",
+                content: `
+<h3>| (Pipe) - Send output to another command</h3>
+<pre><span class="prompt">$</span> ls | grep ".txt"            # List only .txt files
+<span class="prompt">$</span> cat file | head -5         # First 5 lines of file</pre>
+
+<h3>> - Redirect Output (overwrite)</h3>
+<pre><span class="prompt">$</span> echo "hello" > file.txt    # Write to file (overwrites)
+<span class="prompt">$</span> ls > files.txt             # Save listing to file</pre>
+
+<h3>>> - Redirect Output (append)</h3>
+<pre><span class="prompt">$</span> echo "world" >> file.txt   # Append to file</pre>
+
+<h3>< - Input Redirection</h3>
+<pre><span class="prompt">$</span> sort < unsorted.txt         # Sort contents of file</pre>
+                `,
+                exercise: "Try: cat file.txt | grep 'important'"
+            }
+        ];
+
+        let currentLesson = 0;
+
+        function showLesson(index) {
+            currentLesson = index;
+            const lesson = lessons[index];
+            
+            document.getElementById('lessonContent').innerHTML = `
+                <h2>${lesson.title}</h2>
+                ${lesson.content}
+                <div class="exercise">
+                    <h4>✏️ Exercise</h4>
+                    <p>${lesson.exercise}</p>
+                </div>
+            `;
+            
+            document.querySelectorAll('.lesson-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === index);
+            });
+        }
+
+        function runCommand() {
+            const input = document.getElementById('commandInput').value;
+            const output = document.getElementById('output');
+            
+            if (!input.trim()) {
+                output.textContent = 'Please enter a command';
+                return;
+            }
+            
+            output.innerHTML = `<span class="prompt">$</span> ${input}\n\n[Simulated output - commands run on your local terminal]`;
+        }
+
+        // Initialize
+        showLesson(0);
+    </script>
+</body>
+</html>
