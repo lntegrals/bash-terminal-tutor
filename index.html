@@ -3,172 +3,479 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bash Terminal Tutor 🖥️</title>
+    <title>🖥️ Bash Terminal Tutor - Learn Bash the Fun Way!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg-dark: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-terminal: #0d0d14;
+            --primary: #00ff88;
+            --secondary: #ff79c6;
+            --accent: #ffd93d;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --success: #00ff88;
+            --error: #ff5555;
+            --purple: #bd93f9;
+            --cyan: #8be9fd;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0,255,136,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,121,198,0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
             padding: 20px;
         }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+
+        /* Header */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            padding: 30px 0;
+            animation: fadeInDown 0.5s ease;
         }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h1 {
-            color: #00ff88;
             font-size: 2.5em;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 10px;
         }
+
         .subtitle {
-            color: #888;
-            font-size: 1.1em;
+            color: var(--text-dim);
+            font-size: 1.2em;
         }
-        .lesson-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        .lesson-btn {
-            padding: 12px 20px;
-            background: #2d2d44;
-            border: 2px solid #444;
-            border-radius: 8px;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-        .lesson-btn:hover, .lesson-btn.active {
-            background: #00ff88;
-            color: #1a1a2e;
-            border-color: #00ff88;
-        }
-        .lesson-content {
-            background: #1e1e2e;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .lesson-content h2 {
-            color: #00ff88;
-            margin-bottom: 20px;
-        }
-        .lesson-content h3 {
-            color: #ff79c6;
-            margin: 25px 0 15px;
-        }
-        pre {
-            background: #0d0d14;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 10px 0;
-            border: 1px solid #333;
-        }
-        code {
-            color: #f1fa8c;
-            font-family: 'Fira Code', 'Consolas', monospace;
-        }
-        .prompt {
-            color: #00ff88 !important;
-        }
-        .exercise {
-            background: #2d2d44;
-            border-left: 4px solid #ff79c6;
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-card);
+            border-radius: 20px;
             padding: 20px;
             margin: 20px 0;
-            border-radius: 0 8px 8px 0;
+            animation: fadeIn 0.5s ease 0.2s both;
         }
-        .exercise h4 {
-            color: #ff79c6;
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stars {
+            font-size: 1.5em;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: var(--bg-terminal);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--cyan));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Lesson Navigation */
+        .lesson-nav {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .lesson-btn {
+            padding: 12px 18px;
+            background: var(--bg-terminal);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text);
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .lesson-btn:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .lesson-btn.active {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .lesson-btn.completed {
+            background: rgba(0,255,136,0.2);
+            border-color: var(--primary);
+        }
+
+        /* Lesson Content */
+        .lesson-content h2 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .lesson-content p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .lesson-content code {
+            background: var(--bg-terminal);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+
+        .lesson-content pre {
+            background: var(--bg-terminal);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border-left: 3px solid var(--primary);
+        }
+
+        .objectives {
+            background: rgba(189,147,249,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .objectives h4 {
+            color: var(--purple);
             margin-bottom: 10px;
         }
-        .terminal {
-            background: #0d0d14;
+
+        .objectives ul {
+            list-style: none;
+        }
+
+        .objectives li {
+            padding: 5px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .objectives li::before {
+            content: '🎯';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Challenge Box */
+        .challenge {
+            background: linear-gradient(135deg, rgba(255,217,61,0.1), rgba(255,121,198,0.1));
+            border: 2px solid var(--accent);
             border-radius: 12px;
             padding: 20px;
-            margin-top: 30px;
-            border: 1px solid #333;
+            margin: 20px 0;
         }
-        .terminal-input {
+
+        .challenge h4 {
+            color: var(--accent);
+            font-size: 1.1em;
+            margin-bottom: 10px;
             display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .challenge p {
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .hint-btn {
+            background: var(--secondary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 10px;
+            font-family: inherit;
+        }
+
+        .hint-text {
+            background: var(--bg-terminal);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+            color: var(--cyan);
+        }
+
+        /* Terminal */
+        .terminal-card {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .terminal-title {
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27ca40; }
+
+        .terminal-body {
+            flex: 1;
+            background: var(--bg-terminal);
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .terminal-line {
+            margin: 5px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .terminal-prompt {
+            color: var(--primary);
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        .terminal-command {
+            color: var(--text);
+        }
+
+        .terminal-output {
+            color: var(--text-dim);
+            white-space: pre-wrap;
+            width: 100%;
+            padding-left: 20px;
+        }
+
+        .terminal-error {
+            color: var(--error);
+        }
+
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-family: 'Fira Code', monospace;
+            font-size: 1em;
+            outline: none;
+            caret-color: var(--primary);
+        }
+
+        /* Run Button */
+        .run-btn {
+            background: var(--primary);
+            color: var(--bg-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 10px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .run-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
+        }
+
+        /* Achievements */
+        .achievements {
+            margin-top: 20px;
+        }
+
+        .achievement {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-terminal);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+            opacity: 0.5;
+        }
+
+        .achievement.unlocked {
+            opacity: 1;
+            background: rgba(0,255,136,0.2);
+            border: 1px solid var(--primary);
+        }
+
+        /* Animations */
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .celebrate {
+            animation: celebrate 0.5s ease;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        /* Tips */
+        .tip-box {
+            background: rgba(139, 233, 253, 0.1);
+            border-left: 3px solid var(--cyan);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-box h4 {
+            color: var(--cyan);
+            margin-bottom: 8px;
+        }
+
+        /* Command reference */
+        .command-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
             margin-top: 15px;
         }
-        .terminal-input input {
-            flex: 1;
-            padding: 12px;
-            background: #1a1a2e;
-            border: 1px solid #444;
-            border-radius: 6px;
-            color: #fff;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-        }
-        .terminal-input input:focus {
-            outline: none;
-            border-color: #00ff88;
-        }
-        .terminal-input button {
-            padding: 12px 24px;
-            background: #00ff88;
-            border: none;
-            border-radius: 6px;
-            color: #1a1a2e;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .terminal-input button:hover {
-            background: #00cc6a;
-        }
-        .output {
-            background: #0d0d14;
-            padding: 15px;
+
+        .command-ref-item {
+            background: var(--bg-terminal);
+            padding: 10px;
             border-radius: 8px;
-            margin-top: 15px;
-            min-height: 60px;
             font-family: 'Fira Code', monospace;
-            white-space: pre-wrap;
-            color: #bd93f9;
+            font-size: 0.85em;
         }
-        .progress-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+
+        .command-ref-item .cmd {
+            color: var(--primary);
         }
-        .progress-table th, .progress-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #333;
+
+        .command-ref-item .desc {
+            color: var(--text-dim);
+            font-size: 0.9em;
         }
-        .progress-table th {
-            color: #00ff88;
-        }
-        .checkbox {
-            color: #00ff88;
-        }
+
+        /* Footer */
         footer {
             text-align: center;
-            margin-top: 40px;
-            color: #666;
+            padding: 30px;
+            color: var(--text-dim);
         }
+
         footer a {
-            color: #00ff88;
+            color: var(--primary);
         }
     </style>
 </head>
@@ -176,217 +483,448 @@
     <div class="container">
         <header>
             <h1>🖥️ Bash Terminal Tutor</h1>
-            <p class="subtitle">Learn bash commands interactively!</p>
+            <p class="subtitle">Learn to use the terminal - one command at a time!</p>
         </header>
 
-        <div class="lesson-nav">
-            <button class="lesson-btn active" onclick="showLesson(0)">1. Navigation</button>
-            <button class="lesson-btn" onclick="showLesson(1)">2. File Ops</button>
-            <button class="lesson-btn" onclick="showLesson(2)">3. Copy & Move</button>
-            <button class="lesson-btn" onclick="showLesson(3)">4. Reading Files</button>
-            <button class="lesson-btn" onclick="showLesson(4)">5. Search</button>
-            <button class="lesson-btn" onclick="showLesson(5)">6. Permissions</button>
-            <button class="lesson-btn" onclick="showLesson(6)">7. Pipes</button>
-        </div>
-
-        <div class="lesson-content" id="lessonContent">
-            <!-- Content loads here -->
-        </div>
-
-        <div class="terminal">
-            <h3>💻 Try It Yourself!</h3>
-            <div class="terminal-input">
-                <input type="text" id="commandInput" placeholder="Enter a bash command (e.g., ls, pwd, echo hello)" onkeypress="if(event.key==='Enter')runCommand()">
-                <button onclick="runCommand()">Run</button>
+        <!-- Progress -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-title">📚 Your Progress</span>
+                <span class="stars" id="stars">⭐ 0</span>
             </div>
-            <div class="output" id="output">Output will appear here...</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="achievements" id="achievements">
+                <span class="achievement" id="ach-first">🚀 First Command</span>
+                <span class="achievement" id="achExplorer">🔍 Explorer</span>
+                <span class="achievement" id="achCreator">✨ Creator</span>
+                <span class="achievement" id="achMaster">🏆 Master</span>
+            </div>
         </div>
 
-        <div class="lesson-content">
-            <h2>📊 Your Progress</h2>
-            <table class="progress-table">
-                <tr><th>Lesson</th><th>Status</th></tr>
-                <tr><td>1. Navigation (ls, cd, pwd)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>2. File Operations (mkdir, touch, rm)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>3. Copy & Move (cp, mv)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>4. Reading Files (cat, head, tail)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>5. Search (grep, find)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>6. Permissions (chmod, chown)</td><td class="checkbox">⬜</td></tr>
-                <tr><td>7. Pipes & Redirection (|, >, >>)</td><td class="checkbox">⬜</td></tr>
-            </table>
+        <div class="main-grid">
+            <!-- Lesson Panel -->
+            <div class="card">
+                <div class="lesson-nav" id="lessonNav"></div>
+                <div class="lesson-content" id="lessonContent">
+                    <!-- Content loads here -->
+                </div>
+            </div>
+
+            <!-- Terminal Panel -->
+            <div class="card terminal-card">
+                <div class="terminal-header">
+                    <div class="terminal-title">
+                        <div class="terminal-dots">
+                            <span class="terminal-dot dot-red"></span>
+                            <span class="terminal-dot dot-yellow"></span>
+                            <span class="terminal-dot dot-green"></span>
+                        </div>
+                        Terminal
+                    </div>
+                    <button class="run-btn" onclick="clearTerminal()">🗑️ Clear</button>
+                </div>
+                <div class="terminal-body" id="terminal">
+                    <div class="terminal-line">
+                        <span class="terminal-output">Welcome to Bash Terminal Tutor! 🎉</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output">Type commands and press Enter to try them!</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output">Start with: pwd, ls, help</span>
+                    </div>
+                    <div class="terminal-line">
+                        <span class="terminal-output">---</span>
+                    </div>
+                </div>
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">$</span>
+                    <input type="text" class="terminal-input" id="commandInput" 
+                           placeholder="Type a command..." autocomplete="off"
+                           onkeypress="if(event.key==='Enter')runCommand()">
+                    <button class="run-btn" onclick="runCommand()">Run ▶</button>
+                </div>
+            </div>
         </div>
 
         <footer>
-            <p>Built with ❤️ using Marimo | <a href="https://github.com/lntegrals/bash-terminal-tutor">View on GitHub</a></p>
+            <p>🎓 Built with ❤️ for learning | <a href="https://github.com/lntegrals/bash-terminal-tutor">View on GitHub</a></p>
         </footer>
     </div>
 
     <script>
+        // Lesson Data
         const lessons = [
             {
-                title: "📂 Navigation Commands",
+                id: 1,
+                title: "🚀 Welcome",
+                objectives: ["Learn what the terminal is", "Use first commands"],
                 content: `
-<h3>pwd - Print Working Directory</h3>
-<pre><span class="prompt">$</span> pwd
-/home/user</pre>
-<p>Shows you where you are in the filesystem.</p>
-
-<h3>ls - List Directory Contents</h3>
-<pre><span class="prompt">$</span> ls
-Documents  Downloads  Pictures  Music
-
-<span class="prompt">$</span> ls -la   # List all files with details
-total 32
-drwxr-xr-x  5 user  staff   160 Jan  1 12:00 .
-drwxr-xr-x  1 root  root   4096 Jan  1 12:00 ..</pre>
-
-<h3>cd - Change Directory</h3>
-<pre><span class="prompt">$</span> cd Documents    # Go into Documents
-<span class="prompt">$</span> cd ..          # Go up one level
-<span class="prompt">$</span> cd ~           # Go to home directory
-<span class="prompt">$</span> cd -           # Go back to previous directory</pre>
+                    <h2>👋 Hello, Future Terminal Master!</h2>
+                    <p>The terminal (also called shell or command line) is a way to control your computer using text instead of clicking.</p>
+                    <div class="tip-box">
+                        <h4>💡 Why Learn the Terminal?</h4>
+                        <p>It's faster, more powerful, and lets you do amazing things like automate tasks, manage servers, and build software!</p>
+                    </div>
+                    <h3>Let's Start!</h3>
+                    <p>Try these basic commands:</p>
+                    <div class="command-ref">
+                        <div class="command-ref-item">
+                            <div class="cmd">pwd</div>
+                            <div class="desc">Print Working Directory - where am I?</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">ls</div>
+                            <div class="desc">LiSt files - what's here?</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">whoami</div>
+                            <div class="desc">Who am I?</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">help</div>
+                            <div class="desc">Get help!</div>
+                        </div>
+                    </div>
                 `,
-                exercise: "Try: cd Documents"
+                challenge: {
+                    task: "Type <code>ls</code> to see what files are in your current folder",
+                    hint: "Just type ls and press Enter"
+                }
             },
             {
-                title: "📄 File Operations",
+                id: 2,
+                title: "📁 Moving Around",
+                objectives: ["Navigate folders with cd", "Go back with .."],
                 content: `
-<h3>mkdir - Make Directory</h3>
-<pre><span class="prompt">$</span> mkdir myfolder        # Create a directory
-<span class="prompt">$</span> mkdir -p a/b/c        # Create nested directories</pre>
-
-<h3>touch - Create Empty File</h3>
-<pre><span class="prompt">$</span> touch myfile.txt     # Create an empty file
-<span class="prompt">$</span> touch file1 file2    # Create multiple files</pre>
-
-<h3>rm - Remove Files/Directories</h3>
-<pre><span class="prompt">$</span> rm myfile.txt        # Remove a file
-<span class="prompt">$</span> rm -r myfolder      # Remove a directory and its contents
-<span class="prompt">$</span> rm -f myfile        # Force remove (no prompt)</pre>
+                    <h2>🚶 Moving Around</h2>
+                    <p>Use <code>cd</code> to change directories (folders)!</p>
+                    <div class="command-ref">
+                        <div class="command-ref-item">
+                            <div class="cmd">cd foldername</div>
+                            <div class="desc">Go into a folder</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">cd ..</div>
+                            <div class="desc">Go back one level</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">cd ~</div>
+                            <div class="desc">Go to home folder</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">cd -</div>
+                            <div class="desc">Go back to where you were</div>
+                        </div>
+                    </div>
+                    <div class="tip-box">
+                        <h4>💡 Pro Tip!</h4>
+                        <p>Type <code>ls</code> first to see what folders are available!</p>
+                    </div>
                 `,
-                exercise: "Try: mkdir practice && touch practice/hello.txt"
+                challenge: {
+                    task: "Create a new folder: <code>mkdir myfolder</code>",
+                    hint: "Type mkdir myfolder and press Enter"
+                }
             },
             {
-                title: "📋 Copy & Move",
+                id: 3,
+                title: "📝 Creating Things",
+                objectives: ["Create folders with mkdir", "Create files with touch"],
                 content: `
-<h3>cp - Copy Files</h3>
-<pre><span class="prompt">$</span> cp file1.txt file2.txt       # Copy file
-<span class="prompt">$</span> cp -r folder1 folder2         # Copy folder
-<span class="prompt">$</span> cp *.txt backup/              # Copy all .txt files</pre>
-
-<h3>mv - Move/Rename Files</h3>
-<pre><span class="prompt">$</span> mv oldname.txt newname.txt   # Rename file
-<span class="prompt">$</span> mv file.txt folder/          # Move file to folder</pre>
+                    <h2>✨ Creating Files & Folders</h2>
+                    <p>Let's make new things!</p>
+                    <div class="command-ref">
+                        <div class="command-ref-item">
+                            <div class="cmd">mkdir name</div>
+                            <div class="desc">MaKe a new DIRectory (folder)</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">touch file.txt</div>
+                            <div class="desc">Create an empty file</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">rm name</div>
+                            <div class="desc">ReMove a file</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">rm -r folder</div>
+                            <div class="desc">Remove a folder</div>
+                        </div>
+                    </div>
                 `,
-                exercise: "Try: cp important.txt backup.txt"
+                challenge: {
+                    task: "Create a file: <code>touch hello.txt</code>",
+                    hint: "Type touch hello.txt"
+                }
             },
             {
-                title: "📖 Reading Files",
+                id: 4,
+                title: "🔍 Finding Things",
+                objectives: ["Search with grep", "Find files"],
                 content: `
-<h3>cat - Concatenate & Display</h3>
-<pre><span class="prompt">$</span> cat myfile.txt                # Display entire file
-<span class="prompt">$</span> cat file1.txt file2.txt       # Display multiple files</pre>
-
-<h3>head - First Lines</h3>
-<pre><span class="prompt">$</span> head myfile.txt              # First 10 lines
-<span class="prompt">$</span> head -n 5 myfile.txt         # First 5 lines</pre>
-
-<h3>tail - Last Lines</h3>
-<pre><span class="prompt">$</span> tail myfile.txt              # Last 10 lines
-<span class="prompt">$</span> tail -n 5 myfile.txt         # Last 5 lines
-<span class="prompt">$</span> tail -f log.txt              # Follow (watch) a growing file</pre>
+                    <h2>🕵️ Search Commands</h2>
+                    <p>Find what you're looking for!</p>
+                    <div class="command-ref">
+                        <div class="command-ref-item">
+                            <div class="cmd">grep 'word' file</div>
+                            <div class="desc">Search for text IN a file</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">find . -name '*.txt'</div>
+                            <div class="desc">Find all .txt files</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">ls | grep word</div>
+                            <div class="desc">Filter ls results</div>
+                        </div>
+                    </div>
+                    <div class="tip-box">
+                        <h4>💡 The Pipe |</h4>
+                        <p>The <code>|</code> (pipe) sends output from one command to another!</p>
+                    </div>
                 `,
-                exercise: "Try: head -n 5 /etc/passwd"
+                challenge: {
+                    task: "Try: <code>echo hello | grep hell</code>",
+                    hint: "Type echo hello | grep hell"
+                }
             },
             {
-                title: "🔍 Search Commands",
-                content: `
-<h3>grep - Search Within Files</h3>
-<pre><span class="prompt">$</span> grep "hello" myfile.txt              # Find lines with "hello"
-<span class="prompt">$</span> grep -i "hello" myfile.txt           # Case-insensitive search
-<span class="prompt">$</span> grep -r "hello" ./                   # Recursive search
-<span class="prompt">$</span> grep -n "hello" myfile.txt           # Show line numbers</pre>
-
-<h3>find - Search for Files</h3>
-<pre><span class="prompt">$</span> find . -name "*.txt"                 # Find all .txt files
-<span class="prompt">$</span> find . -type d                       # Find all directories
-<span class="prompt">$</span> find . -mtime -7                       # Files modified in last 7 days</pre>
-                `,
-                exercise: "Try: grep -i 'error' logfile.txt"
-            },
-            {
+                id: 5,
                 title: "🔐 Permissions",
+                objectives: ["Understand file permissions", "Make files executable"],
                 content: `
-<h3>chmod - Change Mode (Permissions)</h3>
-<pre><span class="prompt">$</span> chmod 755 script.sh         # rwxr-xr-x
-<span class="prompt">$</span> chmod +x script.sh          # Make executable
-<span class="prompt">$</span> chmod -w file.txt           # Remove write permission
-
-# Permission codes:
-# r = 4 (read), w = 2 (write), x = 1 (execute)
-# Owner | Group | Others</pre>
-
-<h3>chown - Change Owner</h3>
-<pre><span class="prompt">$</span> chown user:group file.txt
-<span class="prompt">$</span> chown -R user:group folder/</pre>
+                    <h2>🔐 Permissions</h2>
+                    <p>Files have permissions - who can read, write, or run them?</p>
+                    <div class="command-ref">
+                        <div class="command-ref-item">
+                            <div class="cmd">ls -l</div>
+                            <div class="desc">List with permissions</div>
+                        </div>
+                        <div class="command-ref-item">
+                            <div class="cmd">chmod +x file</div>
+                            <div class="desc">Make file executable</div>
+                        </div>
+                    </div>
+                    <div class="tip-box">
+                        <h4>📊 Permission Codes</h4>
+                        <p>r = read (4), w = write (2), x = execute (1)</p>
+                    </div>
                 `,
-                exercise: "Try: chmod +x myscript.sh"
-            },
-            {
-                title: "🔗 Pipes & Redirection",
-                content: `
-<h3>| (Pipe) - Send output to another command</h3>
-<pre><span class="prompt">$</span> ls | grep ".txt"            # List only .txt files
-<span class="prompt">$</span> cat file | head -5         # First 5 lines of file</pre>
-
-<h3>> - Redirect Output (overwrite)</h3>
-<pre><span class="prompt">$</span> echo "hello" > file.txt    # Write to file (overwrites)
-<span class="prompt">$</span> ls > files.txt             # Save listing to file</pre>
-
-<h3>>> - Redirect Output (append)</h3>
-<pre><span class="prompt">$</span> echo "world" >> file.txt   # Append to file</pre>
-
-<h3>< - Input Redirection</h3>
-<pre><span class="prompt">$</span> sort < unsorted.txt         # Sort contents of file</pre>
-                `,
-                exercise: "Try: cat file.txt | grep 'important'"
+                challenge: {
+                    task: "Check permissions: <code>ls -l</code>",
+                    hint: "Type ls -l"
+                }
             }
         ];
 
+        // State
         let currentLesson = 0;
+        let progress = JSON.parse(localStorage.getItem('bashTutorProgress')) || {
+            completedLessons: [],
+            stars: 0,
+            achievements: []
+        };
 
+        // Initialize
+        function init() {
+            renderLessonNav();
+            showLesson(0);
+            updateProgress();
+            document.getElementById('commandInput').focus();
+        }
+
+        // Render lesson navigation
+        function renderLessonNav() {
+            const nav = document.getElementById('lessonNav');
+            nav.innerHTML = lessons.map((lesson, i) => `
+                <button class="lesson-btn ${i === currentLesson ? 'active' : ''} ${progress.completedLessons.includes(lesson.id) ? 'completed' : ''}"
+                        onclick="showLesson(${i})">
+                    ${lesson.title}
+                </button>
+            `).join('');
+        }
+
+        // Show lesson
         function showLesson(index) {
             currentLesson = index;
             const lesson = lessons[index];
             
-            document.getElementById('lessonContent').innerHTML = `
-                <h2>${lesson.title}</h2>
+            renderLessonNav();
+            
+            const content = document.getElementById('lessonContent');
+            content.innerHTML = `
                 ${lesson.content}
-                <div class="exercise">
-                    <h4>✏️ Exercise</h4>
-                    <p>${lesson.exercise}</p>
+                <div class="challenge">
+                    <h4>🎯 Challenge</h4>
+                    <p>${lesson.challenge.task}</p>
+                    <button class="hint-btn" onclick="showHint()">💡 Need a Hint?</button>
+                    <div class="hint-text" id="hint">${lesson.challenge.hint}</div>
                 </div>
             `;
+        }
+
+        // Show hint
+        function showHint() {
+            document.getElementById('hint').style.display = 'block';
+        }
+
+        // Run command
+        async function runCommand() {
+            const input = document.getElementById('commandInput');
+            const command = input.value.trim();
+            if (!command) return;
+
+            // Add command to terminal
+            addToTerminal('$', command);
+
+            // Execute command (simulated for now - replace with backend)
+            const output = await executeCommand(command);
+            addToTerminal('', output.output, output.error);
+
+            // Clear input
+            input.value = '';
+
+            // Check challenge
+            checkChallenge(command);
+        }
+
+        // Execute command (mock - replace with real backend)
+        async function executeCommand(cmd) {
+            // For demo, simulate some commands
+            const commands = {
+                'pwd': { output: '/home/learner', error: false },
+                'ls': { output: 'myfolder  hello.txt  notes.txt', error: false },
+                'ls -la': { output: 'total 16\ndrwxr-xr-x 2 learner learner 4096 Mar  4 12:00 .\ndrwxr-xr-x 1 learner learner 4096 Mar  4 12:00 ..\ndrwxr-xr-x 2 learner learner 4096 Mar  4 12:00 myfolder\n-rw-r--r-- 1 learner learner    0 Mar  4 12:00 hello.txt', error: false },
+                'whoami': { output: 'learner', error: false },
+                'help': { output: 'Available commands: pwd, ls, cd, mkdir, touch, rm, cp, mv, cat, grep, find, chmod, echo, help', error: false },
+                'echo hello': { output: 'hello', error: false },
+                'mkdir myfolder': { output: '(folder created)', error: false },
+                'touch hello.txt': { output: '(file created)', error: false },
+                'clear': { output: '', error: false, clear: true }
+            };
+
+            // Check exact match
+            if (commands[cmd]) {
+                return commands[cmd];
+            }
+
+            // Check partial match
+            for (const [key, value] of Object.entries(commands)) {
+                if (cmd.startsWith(key) || key.startsWith(cmd.split(' ')[0])) {
+                    return value;
+                }
+            }
+
+            // Default response
+            return { output: `Command: ${cmd}\n(This is a demo - connect backend for real execution!)`, error: false };
+        }
+
+        // Add to terminal
+        function addToTerminal(prompt, text, isError = false, clear = false) {
+            const terminal = document.getElementById('terminal');
             
-            document.querySelectorAll('.lesson-btn').forEach((btn, i) => {
-                btn.classList.toggle('active', i === index);
+            if (clear) {
+                terminal.innerHTML = '';
+                return;
+            }
+
+            if (prompt) {
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `<span class="terminal-prompt">${prompt}</span><span class="terminal-command">${text}</span>`;
+                terminal.appendChild(line);
+            }
+
+            if (text) {
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `<span class="terminal-output ${isError ? 'terminal-error' : ''}">${text}</span>`;
+                terminal.appendChild(line);
+            }
+
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Clear terminal
+        function clearTerminal() {
+            document.getElementById('terminal').innerHTML = '';
+        }
+
+        // Check challenge completion
+        function checkChallenge(cmd) {
+            const lesson = lessons[currentLesson];
+            const challengeCmd = lesson.challenge.expected || '';
+            
+            if (cmd.includes(challengeCmd.split(' ')[0])) {
+                // Challenge completed!
+                completeLesson(lesson.id);
+            }
+        }
+
+        // Complete lesson
+        function completeLesson(id) {
+            if (!progress.completedLessons.includes(id)) {
+                progress.completedLessons.push(id);
+                progress.stars += 1;
+                
+                // Check achievements
+                if (progress.completedLessons.length === 1) {
+                    unlockAchievement('ach-first');
+                }
+                if (progress.completedLessons.length >= 3) {
+                    unlockAchievement('achExplorer');
+                }
+                if (progress.stars >= 3) {
+                    unlockAchievement('achCreator');
+                }
+                if (progress.completedLessons.length === lessons.length) {
+                    unlockAchievement('achMaster');
+                }
+
+                saveProgress();
+                updateProgress();
+                renderLessonNav();
+
+                // Celebrate!
+                document.body.classList.add('celebrate');
+                setTimeout(() => document.body.classList.remove('celebrate'), 500);
+            }
+        }
+
+        // Unlock achievement
+        function unlockAchievement(id) {
+            if (!progress.achievements.includes(id)) {
+                progress.achievements.push(id);
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.add('unlocked');
+                }
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const percent = (progress.completedLessons.length / lessons.length) * 100;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('stars').textContent = '⭐ ' + progress.stars;
+            
+            // Update achievements display
+            progress.achievements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('unlocked');
             });
         }
 
-        function runCommand() {
-            const input = document.getElementById('commandInput').value;
-            const output = document.getElementById('output');
-            
-            if (!input.trim()) {
-                output.textContent = 'Please enter a command';
-                return;
-            }
-            
-            output.innerHTML = `<span class="prompt">$</span> ${input}\n\n[Simulated output - commands run on your local terminal]`;
+        // Save progress
+        function saveProgress() {
+            localStorage.setItem('bashTutorProgress', JSON.stringify(progress));
         }
 
-        // Initialize
-        showLesson(0);
+        // Initialize on load
+        init();
     </script>
 </body>
 </html>

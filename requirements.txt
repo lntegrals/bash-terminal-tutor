@@ -1,1 +1,6 @@
-marimo
+# For the interactive app
+Flask>=2.0
+Flask-CORS>=3.0
+
+# For deployment
+gunicorn>=20.0

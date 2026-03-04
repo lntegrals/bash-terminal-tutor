@@ -1,0 +1,109 @@
+{
+  "lessons": [
+    {
+      "id": 1,
+      "title": "🚀 Hello Terminal!",
+      "topic": "Introduction",
+      "objectives": [
+        "Learn what the terminal is",
+        "Use your first commands"
+      ],
+      "commands": ["pwd", "ls", "whoami"],
+      "content": "# Welcome to the Terminal!\n\nThe terminal (also called command line, shell, or console) is a way to talk directly to your computer using text commands.\n\nInstead of clicking buttons, you TYPE what you want to do!",
+      "challenges": [
+        {
+          "task": "Type `pwd` and press Enter",
+          "hint": "Just type pwd and hit enter",
+          "expected": "pwd"
+        },
+        {
+          "task": "Type `ls` to see what files are here",
+          "hint": "Type ls and press enter",
+          "expected": "ls"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "📁 Navigating Files",
+      "topic": "cd command",
+      "objectives": [
+        "Change directories with cd",
+        "Go back with .."
+      ],
+      "commands": ["cd", "cd ..", "cd ~"],
+      "content": "# Moving Around\n\nUse `cd` (Change Directory) to move between folders!\n\n- `cd foldername` - Go into a folder\n- `cd ..` - Go back one level\n- `cd ~` - Go home\n- `cd -` - Go back to where you were",
+      "challenges": [
+        {
+          "task": "Create a folder called 'myfiles'",
+          "hint": "Type mkdir myfiles",
+          "expected": "mkdir myfiles"
+        },
+        {
+          "task": "Go into that folder",
+          "hint": "Type cd myfiles",
+          "expected": "cd myfiles"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "📝 Creating Files & Folders",
+      "topic": "mkdir, touch",
+      "objectives": [
+        "Create folders with mkdir",
+        "Create files with touch"
+      ],
+      "commands": ["mkdir", "touch"],
+      "content": "# Making Things!\n\n- `mkdir foldername` - Create a new folder\n- `touch filename.txt` - Create a new empty file\n\nLet's make some stuff!",
+      "challenges": [
+        {
+          "task": "Create a folder called 'projects'",
+          "hint": "mkdir projects",
+          "expected": "mkdir projects"
+        },
+        {
+          "task": "Create a file called 'hello.txt'",
+          "hint": "touch hello.txt",
+          "expected": "touch hello.txt"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "🔍 Finding Things",
+      "topic": "Search commands",
+      "objectives": [
+        "Search in files with grep",
+        "Find files with find"
+      ],
+      "commands": ["grep", "find"],
+      "content": "# Searching\n\n- `grep 'word' file` - Find lines containing 'word'\n- `find . -name '*.txt'` - Find all .txt files\n\nSearch like a detective!",
+      "challenges": [
+        {
+          "task": "Try: echo 'Hello World' | grep World",
+          "hint": "Type exactly: echo 'Hello World' | grep World",
+          "expected": "grep"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "🔐 Permissions",
+      "topic": "chmod",
+      "objectives": [
+        "Understand file permissions",
+        "Make files executable"
+      ],
+      "commands": ["chmod", "ls -l"],
+      "content": "# Permissions\n\nFiles have permissions: who can read, write, or run them!\n\n- `ls -l` - See permissions\n- `chmod +x file` - Make a file runnable\n\nPermissions: r (read) = 4, w (write) = 2, x (execute) = 1",
+      "challenges": [
+        {
+          "task": "See the permissions: ls -l",
+          "hint": "Just type ls -l",
+          "expected": "ls -l"
+        }
+      ]
+    }
+  ]
+}
